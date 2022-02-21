@@ -17,19 +17,26 @@ class BytebankApp extends StatelessWidget{
 
 
 class FormularioTransferencia extends StatelessWidget{
+
+  //criou o controlador privado e instanciou
+  final TextEditingController _controladorCampoNumeroConta = TextEditingController();
+  final TextEditingController _controladorCampoValor = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Criando Transferência'),),
+      appBar: AppBar(title: const Text('Criando Transferência'),),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: TextField(
-              style: TextStyle(
+              controller: _controladorCampoNumeroConta,
+              style: const TextStyle(
                 fontSize: 20.0,
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Número da conta',
                 hintText: '0000',
               ),
@@ -39,10 +46,11 @@ class FormularioTransferencia extends StatelessWidget{
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
-              style: TextStyle(
+              controller: _controladorCampoValor,
+              style: const TextStyle(
                 fontSize: 20.0,
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 icon: Icon(Icons.monetization_on),
                 labelText: 'Valor',
                 hintText: '0000',
@@ -51,8 +59,19 @@ class FormularioTransferencia extends StatelessWidget{
             ),
           ),
           ElevatedButton(
-              onPressed: () => {},
-              child: Text('Confirmar'))
+              child: const Text('Confirmar'),
+            onPressed: (){
+              final int? numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
+              final double?  valor = double.tryParse(_controladorCampoValor.text);
+              debugPrint('oi');
+              if(numeroConta != null && valor != null){
+                final transferenciaCriada = Transferencia(valor, numeroConta);
+                debugPrint('$transferenciaCriada');
+              }
+
+              },
+
+    )
         ],
       ),
     );
@@ -69,7 +88,7 @@ class ListaTransferencia extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text('Transferências'),),
+      appBar: AppBar(title: const Text('Transferências'),),
       body: Column(
         children: <Widget>[
           ItemTransferencia(Transferencia(100.0, 1000)),
@@ -79,7 +98,7 @@ class ListaTransferencia extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {  },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -97,7 +116,7 @@ class ItemTransferencia extends StatelessWidget{
     // TODO: implement build
     return Card(
       child: ListTile(
-        leading: Icon(Icons.monetization_on),
+        leading: const Icon(Icons.monetization_on),
         title: Text(_transferencia.valor.toString()),
         subtitle: Text(_transferencia.numeroConta.toString()),
       ),
@@ -110,5 +129,10 @@ class Transferencia{
   final int numeroConta;
 
   Transferencia(this.valor, this.numeroConta);
+
+  @override
+  String toString() {
+    return 'Transferencia{valor: $valor, numeroConta: $numeroConta}';
+  }
 }
 
