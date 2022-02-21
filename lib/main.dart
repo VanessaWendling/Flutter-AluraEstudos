@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
 
 void main() => runApp(
-      Column(children: <Widget>[
-        Text(
-          'Bem vindo ao Bytebank',
-          textDirection: TextDirection.ltr,
-        ),
-        Text(
-          'Bem vindo ao Bytebank',
-          textDirection: TextDirection.ltr,
-        ),
-        Text(
-          'Bem vindo ao Bytebank',
-          textDirection: TextDirection.ltr,
-        ),
-        Column(children: <Widget>[
-          Text(
-            'Bem vindo ao Bytebank',
-            textDirection: TextDirection.ltr,
+      MaterialApp(
+        home:Scaffold(
+          appBar: AppBar(title: Text('Transferências'),),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {  },
+            child: Icon(Icons.add),
           ),
-          Text(
-            'Bem vindo ao Bytebank',
-            textDirection: TextDirection.ltr,
-          ),
-          Text(
-            'Bem vindo ao Bytebank',
-            textDirection: TextDirection.ltr,
-          ),
-        ])
-      ]),
+          body: Column(
+            children: <Widget>[
+              Card(
+                child:ListTile(
+                  leading: Icon(Icons.monetization_on),
+                  title: Text('100.0'),
+                  subtitle: Text('1000'),
+                ),
+              ),
+              Card(
+                child:ListTile(
+                  leading: Icon(Icons.monetization_on),
+                  title: Text('200.0'),
+                  subtitle: Text('1000'),
+                ),
+              ),
+            ],
+          )
+        )
+      )
     );
