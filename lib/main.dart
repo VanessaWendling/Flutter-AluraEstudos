@@ -6,13 +6,26 @@ class BytebankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-      body: ListaTransferencia(),
-    ));
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.deepOrange,
+        ).copyWith(
+          secondary: Colors.deepOrangeAccent,
+        ),
+      ),
+      home: ListaTransferencia(),
+    );
   }
 }
 
-class FormularioTransferencia extends StatelessWidget {
+class FormularioTransferencia extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return FormularioTransferenciaState();
+  }
+}
+
+class FormularioTransferenciaState extends State<FormularioTransferencia> {
   //criou o controlador privado e instanciou
   final TextEditingController _controladorCampoNumeroConta =
       TextEditingController();
@@ -24,22 +37,24 @@ class FormularioTransferencia extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Criando Transferência'),
       ),
-      body: Column(
-        children: [
-          Editor(
-              controlador: _controladorCampoNumeroConta,
-              rotulo: 'Número da Conta',
-              dica: '000'),
-          Editor(
-              controlador: _controladorCampoValor,
-              rotulo: 'Valor',
-              dica: '00.0',
-              icone: Icons.monetization_on),
-          ElevatedButton(
-            child: const Text('Confirmar'),
-            onPressed: () => _criaTransferencia(context),
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Editor(
+                controlador: _controladorCampoNumeroConta,
+                rotulo: 'Número da Conta',
+                dica: '000'),
+            Editor(
+                controlador: _controladorCampoValor,
+                rotulo: 'Valor',
+                dica: '00.0',
+                icone: Icons.monetization_on),
+            ElevatedButton(
+              child: const Text('Confirmar'),
+              onPressed: () => _criaTransferencia(context),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -59,12 +74,18 @@ StatefulWidget - capacidade de modificar o widget de maneira dinâmica.
 StatelessElement - não muda dinamicamente.
  */
 
-class ListaTransferencia extends StatelessWidget {
+class ListaTransferencia extends StatefulWidget {
   final List<Transferencia> _transferencias = [];
 
   @override
+  State<StatefulWidget> createState() {
+    return ListaTransferenciaState();
+  }
+}
+
+class ListaTransferenciaState extends State<ListaTransferencia> {
+  @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: const Text('Transferências'),
@@ -75,9 +96,9 @@ class ListaTransferencia extends StatelessWidget {
         children: <Widget>[
         */
       body: ListView.builder(
-        itemCount: _transferencias.length,
+        itemCount: widget._transferencias.length,
         itemBuilder: (context, indice) {
-          final transferencia = _transferencias[indice];
+          final transferencia = widget._transferencias[indice];
           return ItemTransferencia(transferencia);
         },
       ),
@@ -93,7 +114,11 @@ class ListaTransferencia extends StatelessWidget {
             debugPrint('chegou no then do future');
             debugPrint('$transferenciaRecebida');
             //o uso da ! é como se você dissesse ao seu compilador, eu garanto que o int? x não é nulo , caso não, lance exceção
-            _transferencias.add(transferenciaRecebida!);
+            if (transferenciaRecebida != null) {
+              setState(() {
+                widget._transferencias.add(transferenciaRecebida);
+              });
+            }
           });
         },
       ),
@@ -109,7 +134,6 @@ class ItemTransferencia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Card(
       child: ListTile(
         leading: const Icon(Icons.monetization_on),
